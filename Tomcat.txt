@@ -1,0 +1,89 @@
+#!/bin/bash
+function Parse(){
+
+while read line
+do
+
+if [ ${line%=*} = "IP" ];
+then
+ip=${line#*=}
+elif [ ${line%=*} = "APP" ];
+then
+app=${line#*=}
+elif [ ${line%=*} = "PORT" ];
+then
+port=${line#*=}
+elif [ ${line%=*} = "STATUS" ];
+then
+status=${line#*=}
+elif [ ${line%=*} = "START" ];
+then
+start_app=${line#*=}
+elif [ ${line%=*} = "STOP" ];
+then
+stop_app=${line#*=}
+fi
+
+if(("$line"==-1))
+then
+echo "IP     :  $ip"
+echo "APP    :  $app"
+echo "PORT   :  $port"
+echo "STATUS :  $status"
+#echo "START  :  $start_app"
+#echo "STOP   :  $stop_app"
+
+if [ "$status" == "on" ]
+then
+Run
+elif [ "$status" == "off" ]
+then
+echo "$app kapalı..."
+sleep 5
+else
+echo "Sunucu bulunmadı..."
+fi 
+fi
+
+done < conf
+}
+
+
+function Start() {
+cd
+   ${start_app}
+}
+
+function Stop(){
+cd
+  ${stop_app}
+}
+
+
+
+
+function Run() {
+Stop
+echo "$app stopped..."
+sleep 5
+PID=`ps -ef | grep $app | awk '{print $2}'`
+
+ARRAY=( ${PID// / } )
+ELEMENTS=${#ARRAY[@]}
+echo "size: $ELEMENTS"
+if(($ELEMENTS>1))
+then
+for (( i=0;i<$ELEMENTS;i++)); do
+    echo "$i: ${ARRAY[${i}]}"
+    kill -9 ${ARRAY[${i}]}
+sleep 5
+done
+fi 
+
+echo "$app started..."
+Start
+sleep 5 
+
+}
+
+Parse

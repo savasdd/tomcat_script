@@ -1,0 +1,21 @@
+IP=127.0.0.1
+APP=apache-tomcat-7.0.75
+PORT=8080
+STATUS=on
+START=/home/user/apache/apache-tomcat-7.0.75/bin/startup.sh
+STOP=/home/user/apache/apache-tomcat-7.0.75/bin/shutdown.sh
+-1
+IP=127.0.0.2
+APP=firefox
+PORT=8080
+STATUS=on
+START=firefox 
+STOP=killall firefox
+-1
+IP=127.0.0.3
+APP=vlc
+PORT=8080
+STATUS=off
+START=vlc
+STOP=killall vlc
+-1
